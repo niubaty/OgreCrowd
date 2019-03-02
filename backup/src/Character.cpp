@@ -34,8 +34,7 @@
 */
 
 #include "Character.h"
-#include <iostream>
-//#include "OgreRecastApplication.h"
+#include "OgreRecastApplication.h"
 
 // Remember: this value should be squared and should be strictly >0 !
 const Ogre::Real Character::DESTINATION_RADIUS = 1 * 1;
@@ -150,10 +149,7 @@ void Character::updatePosition(Ogre::Real timeSinceLastFrame)
 
         // Make other agents avoid first character by placing a temporary obstacle in its position
         mDetourTileCache->removeTempObstacle(mTempObstacle);   // Remove old obstacle
-        //getNode()->setPosition(getPosition() + timeSinceLastFrame * getVelocity());
-		Ogre::Vector3 agentPos;
-		OgreRecast::FloatAToOgreVect3(getAgent()->npos, agentPos);
-		getNode()->setPosition(agentPos);
+        getNode()->setPosition(getPosition() + timeSinceLastFrame * getVelocity());
         // TODO check whether this position is within navmesh
         mTempObstacle = mDetourTileCache->addTempObstacle(getPosition());   // Add new obstacle
     }
@@ -246,7 +242,9 @@ Ogre::Vector3 Character::getLookingDirection()
 void Character::moveForward()
 {
     Ogre::Vector3 lookDirection = getLookingDirection();
-	setVelocity(getMaxSpeed()* lookDirection);
+    lookDirection.normalise();
+
+    setVelocity(getMaxSpeed() * lookDirection);
 }
 
 void Character::setVelocity(Ogre::Vector3 velocity)
@@ -254,9 +252,9 @@ void Character::setVelocity(Ogre::Vector3 velocity)
     mManualVelocity = velocity;
     mStopped = false;
     mDestination = Ogre::Vector3::ZERO;     // TODO this is not ideal
+
     if(mAgentControlled && isLoaded())
         mDetourCrowd->requestVelocity(getAgentID(), mManualVelocity);
-
 }
 
 Ogre::Vector3 Character::getVelocity()
@@ -317,21 +315,19 @@ void Character::setAgentControlled(bool agentControlled)
                 mDetourTileCache->removeTempObstacle(mTempObstacle);
             mTempObstacle = 0;
             mAgentID = mDetourCrowd->addAgent(getPosition());
-			mDestination = DirectionCache;
+            mDestination = mDetourCrowd->getLastDestination();
             mManualVelocity = Ogre::Vector3::ZERO;
             mStopped = true;
         } else {
             mTempObstacle = mDetourTileCache->addTempObstacle(getPosition());   // Add temp obstacle at current position
             mDetourCrowd->removeAgent(mAgentID);
             mAgentID = -1;
-			DirectionCache=mDetourCrowd->getLastDestination();
             mDestination = Ogre::Vector3::ZERO;     // TODO this is not ideal
             mStopped = false;
         }
         mAgentControlled = agentControlled;
     }
 }
-
 
 bool Character::isAgentControlled()
 {
@@ -370,7 +366,7 @@ void Character::unLoad()
     mAgentID = -1;
     mAgent = NULL;
 
-    //hide();
+    hide();
 }
 
 void Character::show()

@@ -36,7 +36,7 @@
 #ifndef CROWDMANAGER_H
 #define CROWDMANAGER_H
 
-
+#include <OIS.h>
 #include <Ogre.h>
 
 class Character;
@@ -72,7 +72,7 @@ public:
       **/
     int getSize(void) { return mCrowdSize; }
 
-    int getNbAssignedAgents(void) {return mAssignedCharacters.size(); }
+    int getNbAssignedAgents(void) { mAssignedCharacters.size(); }
 
     int getGridDimensions(void) { return mDimension; }
 

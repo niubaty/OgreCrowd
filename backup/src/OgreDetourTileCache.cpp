@@ -34,7 +34,7 @@
 */
 
 #include "OgreDetourTileCache.h"
-#include "DetourTileCache.h"
+#include "DetourTileCache/DetourTileCache.h"
 #include <float.h>
 
 

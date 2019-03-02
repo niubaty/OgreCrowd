@@ -36,8 +36,17 @@
 #ifndef OGRERECASTPAGEDCROWDAPPLICATION_H
 #define OGRERECASTPAGEDCROWDAPPLICATION_H
 
-#include "BaseApplication.h"
+#include "Ogre.h"
+#include "OgreApplicationContext.h"
+#include "OgreTrays.h"
+#include "OgreOverlay.h"
+#include "OgreCameraMan.h"
+
 #include "Character.h"
+
+using namespace Ogre;
+using namespace OgreBites;
+
 class CrowdManager;
 
 /**
@@ -46,7 +55,7 @@ class CrowdManager;
   * large city, where only the area around the camera is populated by crowd
   * agents at one time.
   **/
-class OgreRecastPagedCrowdApplication : public BaseApplication
+class OgreRecastPagedCrowdApplication : public OgreBites::ApplicationContext, public OgreBites::InputListener
 {
 public:
     OgreRecastPagedCrowdApplication();
@@ -66,18 +75,18 @@ protected:
       * Initialise the scene and everything needed for pathfinding and steering.
       * Setup demo specific constructions.
       **/
-    virtual void createScene(void);
+    virtual void setup(void);
 
-    virtual bool keyPressed(const OIS::KeyEvent &arg);
+    virtual bool keyPressed(const KeyboardEvent &evt);
 
-    virtual bool keyReleased(const OIS::KeyEvent &arg);
+    virtual bool keyReleased(const KeyboardEvent &evt);
 
     /**
       * Update state for rendering a new frame.
       **/
     virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 
-    virtual void createFrameListener(void);
+    virtual void createGUI(void);
 
     void updateDebugInfo(void);
 
@@ -131,6 +140,11 @@ protected:
     bool mGoingDown;
     bool mGoingLeft;
     bool mGoingRight;
+
+	OgreBites::CameraMan* caman;
+	SceneManager* mSceneMgr;
+	Camera* mCamera;
+	TrayManager* mTrayMgr;
 
 };
 

@@ -35,7 +35,7 @@
 
 #include "Ogre.h"
 #include "OgreDetourCrowd.h"
-#include "DetourCommon.h"
+#include "Detour/DetourCommon.h"
 
 
 OgreDetourCrowd::OgreDetourCrowd(OgreRecast *recast)
@@ -78,9 +78,8 @@ OgreDetourCrowd::OgreDetourCrowd(OgreRecast *recast)
                     crowd->init(MAX_AGENTS, m_recast->getAgentRadius(), nav);
 
                     // Make polygons with 'disabled' flag invalid.
-                    //original code: crowd->getEditableFilter()->setExcludeFlags(SAMPLE_POLYFLAGS_DISABLED);
-					//crowd->getEditableFilter()->setExcludeFlags(SAMPLE_POLYFLAGS_DISABLED);
-					crowd->getEditableFilter(0)->setExcludeFlags(SAMPLE_POLYFLAGS_DISABLED);
+                    crowd->getEditableFilter()->setExcludeFlags(SAMPLE_POLYFLAGS_DISABLED);
+
 
                     // Create different avoidance settings presets. The crowd object can store multiple, identified by an index number.
                     // Setup local avoidance params to different qualities.
@@ -162,7 +161,8 @@ void OgreDetourCrowd::updateTick(const float dt)
 
         m_agentDebug.vod->normalizeSamples();
 
-
+        //m_crowdSampleCount.addSample((float)crowd->getVelocitySampleCount());
+        //m_crowdTotalTime.addSample(getPerfDeltaTimeUsec(startTime, endTime) / 1000.0f);
 }
 
 
@@ -295,9 +295,7 @@ void OgreDetourCrowd::setMoveTarget(Ogre::Vector3 position, bool adjust)
         // Find nearest point on navmesh and set move request to that location.
         dtNavMeshQuery* navquery = m_recast->m_navQuery;
         dtCrowd* crowd = m_crowd;
-        //original code : const dtQueryFilter* filter = crowd->getFilter();
-		//const dtQueryFilter* filter = crowd->getFilter();
-		const dtQueryFilter* filter = crowd->getFilter(0);
+        const dtQueryFilter* filter = crowd->getFilter();
         const float* ext = crowd->getQueryExtents();
         float p[3];
         OgreRecast::OgreVect3ToFloatA(position, p);
@@ -334,10 +332,8 @@ void OgreDetourCrowd::setMoveTarget(int agentId, Ogre::Vector3 position, bool ad
     // Find nearest point on navmesh and set move request to that location.
     dtNavMeshQuery* navquery = m_recast->m_navQuery;
     dtCrowd* crowd = m_crowd;
-    //original code: const dtQueryFilter* filter = crowd->getFilter();
-	//const dtQueryFilter* filter = crowd->getFilter();
-	const dtQueryFilter* filter = crowd->getFilter(0);
-	const float* ext = crowd->getQueryExtents();
+    const dtQueryFilter* filter = crowd->getFilter();
+    const float* ext = crowd->getQueryExtents();
     float p[3];
     OgreRecast::OgreVect3ToFloatA(position, p);
 

@@ -36,7 +36,6 @@
 #include "AnimateableCharacter.h"
 #include "OgreRecastApplication.h"
 
-
 AnimateableCharacter::AnimateableCharacter(Ogre::String name, Ogre::SceneManager *sceneMgr, OgreDetourCrowd* detourCrowd, bool debugDraw, Ogre::Vector3 position)
     : Character(name, sceneMgr, detourCrowd, position),
     mAnimState(NULL),
@@ -94,61 +93,6 @@ AnimateableCharacter::AnimateableCharacter(Ogre::String name, Ogre::SceneManager
     mDebugNode->setVisible(mDebugDraw);
 }
 
-AnimateableCharacter::AnimateableCharacter(Ogre::String name, Ogre::String meshname, Ogre::Vector3 headingDirection,
-	Ogre::Real animSpeed,
-	Ogre::SceneManager *sceneMgr,	OgreDetourCrowd* detourCrowd, bool debugDraw, Ogre::Vector3 position)
-	: Character(name, sceneMgr, detourCrowd, position),
-	mAnimState(NULL),
-	mEnt(NULL),
-	mAnimSpeedScale(1),
-	mDebugNode(NULL),
-	mDebugDraw(debugDraw)
-{
-	mNode = sceneMgr->getRootSceneNode()->createChildSceneNode(name + "Node");
-	mEnt = sceneMgr->createEntity(name, meshname);
-
-	// Set looking direction for this model
-	setRelativeLookingDirection(headingDirection);
-
-	mEnt->setQueryFlags(OgreRecastApplication::DEFAULT_MASK);   // Exclude from ray queries
-	mNode->attachObject(mEnt);
-	mNode->setPosition(position);
-
-	// Assign animation
-	mAnimState = mEnt->getAnimationState("Walk");
-	mAnimState->setEnabled(true);
-	mAnimState->setLoop(true);
-
-	Ogre::Vector3 bBoxSize = mEnt->getBoundingBox().getSize();
-
-	Ogre::Real agentRadius = mDetourCrowd->getAgentRadius();
-	Ogre::Real agentHeight = mDetourCrowd->getAgentHeight();
-
-	// Set Height to match that of agent
-	//mNode->setScale((agentRadius*2)/bBoxSize.y, agentHeight/bBoxSize.y, (agentRadius*2)/bBoxSize.y);
-	Ogre::Real scale = agentHeight / bBoxSize.y;
-	mNode->setScale(scale, scale, scale);
-
-	// Set animation speed scaling
-	//mAnimSpeedScale = 0.35*(scale * 4);
-	mAnimSpeedScale = animSpeed;
-
-
-	// Debug draw agent
-	mDebugNode = mNode->createChildSceneNode(name + "AgentDebugNode");
-	mDebugNode->setPosition(0, mDetourCrowd->m_recast->getNavmeshOffsetFromGround(), 0);
-	Ogre::Entity* debugEnt = sceneMgr->createEntity(name + "AgentDebug", "Cylinder.mesh");
-	debugEnt->setMaterialName("Cylinder/Wires/LightBlue");
-	mDebugNode->attachObject(debugEnt);
-	// Set marker scale to size of agent
-	mDebugNode->setInheritScale(false);
-	mDebugNode->setScale(agentRadius * 2, agentHeight, agentRadius * 2);
-	debugEnt->setQueryFlags(OgreRecastApplication::DEFAULT_MASK);   // Exclude from ray queries
-	mDebugNode->setVisible(mDebugDraw);
-}
-
-
-
 void AnimateableCharacter::update(Ogre::Real timeSinceLastFrame)
 {
     updatePosition(timeSinceLastFrame);
@@ -160,7 +104,6 @@ void AnimateableCharacter::update(Ogre::Real timeSinceLastFrame)
     Ogre::Real speed = velocity.length();
 
     if(speed > 0.15) {
-		mAnimState = mEnt->getAnimationState("Walk");
         mAnimState->setEnabled(true);
         mAnimState->addTime(mAnimSpeedScale * speed * timeSinceLastFrame);
 
@@ -174,10 +117,8 @@ void AnimateableCharacter::update(Ogre::Real timeSinceLastFrame)
             mNode->rotate(src.getRotationTo(velocity));
         }
     } else {    // Assume character has stopped
-        //mAnimState->setEnabled(false);
-		mAnimState = mEnt->getAnimationState("Idle");
-		mAnimState->setEnabled(true);
-		mAnimState->addTime(mAnimSpeedScale * timeSinceLastFrame);
+        mAnimState->setEnabled(false);
+        mAnimState->setTimePosition(0);
     }
 }
 

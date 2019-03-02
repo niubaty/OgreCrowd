@@ -55,7 +55,7 @@ public:
       * Position defines initial position the character has to be placed on (should be a valid position on the navmesh).
       **/
     AnimateableCharacter(Ogre::String name, Ogre::SceneManager* sceneMgr, OgreDetourCrowd* detourCrowd, bool debugDraw = false, Ogre::Vector3 position = Ogre::Vector3::ZERO);
-	AnimateableCharacter(Ogre::String name, Ogre::String meshname, Ogre::Vector3 headingDirection, Ogre::Real animSpeed,Ogre::SceneManager* sceneMgr, OgreDetourCrowd* detourCrowd, bool debugDraw = false, Ogre::Vector3 position = Ogre::Vector3::ZERO);
+
     /**
       * The entity that represents this character in the scene
       **/

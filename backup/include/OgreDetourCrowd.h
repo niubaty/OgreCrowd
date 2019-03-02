@@ -38,7 +38,7 @@
 
 #include "OgreRecastDefinitions.h"
 #include "OgreRecast.h"
-#include "DetourCrowd.h"
+#include "DetourCrowd/DetourCrowd.h"
 #include <vector>
 
 

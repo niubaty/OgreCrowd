@@ -38,7 +38,7 @@
 
 #include <Ogre.h>
 #include "OgreDetourCrowd.h"
-#include "DetourCrowd.h"
+#include "DetourCrowd/DetourCrowd.h"
 #include "OgreDetourTileCache.h"
 
 class OgreRecastApplication;    //Advance declaration
@@ -149,7 +149,7 @@ public:
     /**
       * Manually control the character moving it forward.
       **/
-    virtual void moveForward();
+    virtual void moveForward(void);
 
     /**
       * Stop any movement this character is currently doing. This means losing
@@ -206,7 +206,6 @@ public:
       * detourTileCache first.
       **/
     void setAgentControlled(bool agentControlled);
-
 
     /**
       * Determines whether this character is controlled by an agent.
@@ -357,8 +356,6 @@ protected:
 
     // Friend the application class to allow setDestinationForAllAgents to update character destination values
     friend class OgreRecastApplication;
-
-	Ogre::Vector3 DirectionCache;
 };
 
 #endif // CHARACTER_H

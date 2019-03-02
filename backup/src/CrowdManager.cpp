@@ -33,7 +33,7 @@
 
 */
 
-#include "CrowdManager.h"
+#include "include/CrowdManager.h"
 #include "OgreDetourCrowd.h"
 #include "Character.h"
 #include "AnimateableCharacter.h"
@@ -409,7 +409,7 @@ void CrowdManager::unloadAgents(int tx, int ty)
     if(! tileExists(tx,ty))
         return;
 
-    unsigned int i = 0;
+    u_int i = 0;
     int agentsRemoved = 0;
     while(i < mAssignedCharacters.size()) {
         Character *character = mAssignedCharacters[i];
@@ -430,7 +430,7 @@ void CrowdManager::unloadAgents(int tx, int ty)
 
 void CrowdManager::unloadAgentsOutsideArea(NavmeshTileSet tileSet)
 {
-    unsigned int i = 0;
+    u_int i = 0;
     int agentsRemoved = 0;
     while(i < mAssignedCharacters.size()) {
         Character *character = mAssignedCharacters[i];

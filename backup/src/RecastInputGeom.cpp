@@ -1224,7 +1224,7 @@ void InputGeom::getManualMeshInformation(const Ogre::ManualObject *manual,
             {
                 Ogre::HardwareIndexBufferSharedPtr indexBuffer = renderOp->indexData->indexBuffer;
 
-                if (indexBuffer==NULL || renderOp->operationType != Ogre::RenderOperation::OT_TRIANGLE_LIST)
+                if (indexBuffer.isNull() || renderOp->operationType != Ogre::RenderOperation::OT_TRIANGLE_LIST)
                 {
                     //No triangles here, so we just drop the collected vertices and move along to the next section.
                     continue;

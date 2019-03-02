@@ -35,7 +35,7 @@
 
 #include "OgreRecast.h"
 #include "RecastInputGeom.h"
-#include "DetourTileCacheBuilder.h"
+#include "DetourTileCache/DetourTileCacheBuilder.h"
 #include "OgreRecastNavmeshPruner.h"
 
 

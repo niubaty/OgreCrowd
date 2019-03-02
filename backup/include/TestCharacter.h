@@ -33,38 +33,35 @@
 
 */
 
-#ifndef ANIMATEABLECHARACTER_H
-#define ANIMATEABLECHARACTER_H
+#ifndef TESTCHARACTER_H
+#define TESTCHARACTER_H
 
 #include "Character.h"
+#include <Ogre.h>
 
 /**
-  * More complex character that shows an animated walking human to represent an agent.
-  * This is probably closer to what you would use in a real scenario. This class can just
-  * be replaced with your character class if you already have one and it mainly serves
-  * as an example of how characters can be integrated with detour agents.
+  * Simple representation of an agent. This is the most simple way to show and debug
+  * detour crowd agents.
+  * Agents are represented as blue cylinders.
   **/
-class AnimateableCharacter : public Character
+class TestCharacter : public Character
 {
 public:
     /**
-      * Create a new human character with specified name, the entities will be placed in the specified scene manager.
+      * Create a simple test character, the entities will be placed in the specified scene manager.
       * detourCrowd is the crowd manager in which an agent for this character will be created (make sure you don't create
       * more characters than MAX_AGENTS).
-      * Set debugDraw to true to initially draw debug geometry (can be disabled afterwards too).
       * Position defines initial position the character has to be placed on (should be a valid position on the navmesh).
       **/
-    AnimateableCharacter(Ogre::String name, Ogre::SceneManager* sceneMgr, OgreDetourCrowd* detourCrowd, bool debugDraw = false, Ogre::Vector3 position = Ogre::Vector3::ZERO);
-	AnimateableCharacter(Ogre::String name, Ogre::String meshname, Ogre::Vector3 headingDirection, Ogre::Real animSpeed,Ogre::SceneManager* sceneMgr, OgreDetourCrowd* detourCrowd, bool debugDraw = false, Ogre::Vector3 position = Ogre::Vector3::ZERO);
+    TestCharacter(Ogre::String name, Ogre::SceneManager *sceneMgr, OgreDetourCrowd* detourCrowd, Ogre::Vector3 position = Ogre::Vector3::ZERO);
+
     /**
       * The entity that represents this character in the scene
       **/
     virtual Ogre::Entity* getEntity(void);
 
     /**
-      * Update one tick in the render loop. Advances animation and character position.
-      * In order for the agents to be updated, you first need to call the detourCrowd
-      * update function.
+      * @see{Character::update(Ogre::Real)}
       **/
     virtual void update(Ogre::Real timeSinceLastFrame);
 
@@ -73,36 +70,11 @@ public:
       **/
     virtual void setDebugVisibility(bool visible);
 
-    virtual bool getDebugVisibility(void);
-
-    virtual void show(void);
-
-    void randomizeAnimationPosition(void);
-
 protected:
-    bool mDebugDraw;
-
     /**
       * Main entity that represents this character.
       **/
     Ogre::Entity *mEnt;
-
-    /**
-      * Currently active animation state.
-      **/
-    Ogre::AnimationState* mAnimState;
-
-    /**
-      * Speed scaling factor of the animation playback.
-      **/
-    Ogre::Real mAnimSpeedScale;
-
-    /**
-      * Scenenode that stores all geometry related to
-      * recast debug drawing. Can be made visible with
-      * setDebugVisibility().
-      **/
-    Ogre::SceneNode *mDebugNode;
 };
 
-#endif // ANIMATEABLECHARACTER_H
+#endif // TESTCHARACTER_H
